@@ -349,7 +349,9 @@ def save_simulation_results(portfolio_values):
 
 def plot_simulation_paths(portfolio_values):
 
-    fig, ax = plt.subplots(figsize=(12, 7))
+    fig, ax = plt.subplots(figsize=(12, 7), facecolor=CHART_BG)
+    fig.patch.set_facecolor(CHART_BG)
+    ax.set_facecolor(AXES_BG)
 
     # Display 100 simulated portfolio paths
     for i in range(100):
@@ -366,9 +368,14 @@ def plot_simulation_paths(portfolio_values):
     ax.set_axisbelow(True)
     fig.tight_layout(pad=2)
 
-    plt.savefig(
+    fig.savefig(
         RESULTS_DIR / "monte_carlo_paths.png",
-        dpi=300
+        dpi=300,
+        facecolor=CHART_BG,
+        edgecolor=CHART_BG,
+        transparent=False,
+        bbox_inches="tight",
+        pad_inches=0.15
     )
 
     plt.show()
@@ -382,7 +389,9 @@ def plot_final_distribution(portfolio_values):
 
     final_values = portfolio_values[:, -1]
 
-    fig, ax = plt.subplots(figsize=(11, 6))
+    fig, ax = plt.subplots(figsize=(11, 6), facecolor=CHART_BG)
+    fig.patch.set_facecolor(CHART_BG)
+    ax.set_facecolor(AXES_BG)
 
     ax.hist(final_values, bins=60, density=True, color="#91a98c", edgecolor=AXES_BG, linewidth=0.55, alpha=0.92)
 
@@ -398,9 +407,14 @@ def plot_final_distribution(portfolio_values):
     ax.set_axisbelow(True)
     fig.tight_layout(pad=2)
 
-    plt.savefig(
+    fig.savefig(
         RESULTS_DIR / "monte_carlo_distribution.png",
-        dpi=300
+        dpi=300,
+        facecolor=CHART_BG,
+        edgecolor=CHART_BG,
+        transparent=False,
+        bbox_inches="tight",
+        pad_inches=0.15
     )
 
     plt.show()
