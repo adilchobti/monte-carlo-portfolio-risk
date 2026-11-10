@@ -164,7 +164,9 @@ def save_results(returns, metrics, covariance, correlation):
 
 def plot_correlation_matrix(correlation):
 
-    fig, ax = plt.subplots(figsize=(11, 8))
+    fig, ax = plt.subplots(figsize=(11, 8), facecolor=CHART_BG)
+    fig.patch.set_facecolor(CHART_BG)
+    ax.set_facecolor(AXES_BG)
 
     from matplotlib.colors import LinearSegmentedColormap
     green_corr = LinearSegmentedColormap.from_list("racing_green_corr", ["#647f9b", "#26382e", "#a5a58d", "#e7e5dc"], N=256)
@@ -176,9 +178,14 @@ def plot_correlation_matrix(correlation):
     ax.tick_params(colors=MUTED_COLOR, labelsize=9)
     fig.tight_layout(pad=2)
 
-    plt.savefig(
+    fig.savefig(
         RESULTS_DIR / "correlation_heatmap.png",
-        dpi=300
+        dpi=300,
+        facecolor=CHART_BG,
+        edgecolor=CHART_BG,
+        transparent=False,
+        bbox_inches="tight",
+        pad_inches=0.15
     )
 
     plt.show()
