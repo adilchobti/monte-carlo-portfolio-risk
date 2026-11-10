@@ -7,6 +7,33 @@ import seaborn as sns
 from pathlib import Path
 
 # ==========================================
+# 0. VISUAL IDENTITY — BRITISH RACING GREEN
+# ==========================================
+CHART_BG = "#142019"
+AXES_BG = "#1b2a21"
+TEXT_COLOR = "#e7e5dc"
+MUTED_COLOR = "#a5a58d"
+GRID_COLOR = "#405247"
+
+def apply_portfolio_style():
+    """Apply the portfolio's dark green visual identity to all charts."""
+    plt.rcParams.update({
+        "figure.facecolor": CHART_BG, "axes.facecolor": AXES_BG,
+        "savefig.facecolor": CHART_BG, "savefig.edgecolor": CHART_BG,
+        "text.color": TEXT_COLOR, "axes.labelcolor": TEXT_COLOR,
+        "axes.edgecolor": GRID_COLOR, "xtick.color": MUTED_COLOR,
+        "ytick.color": MUTED_COLOR, "font.family": "DejaVu Sans",
+        "font.size": 10, "axes.titlesize": 14, "axes.titleweight": "medium",
+        "axes.labelsize": 10, "legend.facecolor": AXES_BG,
+        "legend.edgecolor": GRID_COLOR, "legend.labelcolor": TEXT_COLOR,
+        "grid.color": GRID_COLOR, "grid.alpha": 0.42,
+    })
+
+apply_portfolio_style()
+
+
+
+# ==========================================
 # 1. PROJECT CONFIGURATION
 # ==========================================
 
@@ -137,20 +164,17 @@ def save_results(returns, metrics, covariance, correlation):
 
 def plot_correlation_matrix(correlation):
 
-    plt.figure(figsize=(11, 8))
+    fig, ax = plt.subplots(figsize=(11, 8))
 
-    sns.heatmap(
-        correlation,
-        annot=True,
-        cmap="coolwarm",
-        fmt=".2f",
-        linewidths=0.5,
-        vmin=-1,
-        vmax=1
-    )
-
-    plt.title("Portfolio Asset Correlation Matrix")
-    plt.tight_layout()
+    from matplotlib.colors import LinearSegmentedColormap
+    green_corr = LinearSegmentedColormap.from_list("racing_green_corr", ["#647f9b", "#26382e", "#a5a58d", "#e7e5dc"], N=256)
+    sns.heatmap(correlation, annot=True, cmap=green_corr, fmt=".2f", linewidths=0.6,
+                linecolor=CHART_BG, vmin=-1, vmax=1, center=0,
+                annot_kws={"size": 9, "color": TEXT_COLOR},
+                cbar_kws={"shrink": 0.78}, ax=ax)
+    ax.set_title("Portfolio Asset Correlation Matrix", color=TEXT_COLOR, pad=18)
+    ax.tick_params(colors=MUTED_COLOR, labelsize=9)
+    fig.tight_layout(pad=2)
 
     plt.savefig(
         RESULTS_DIR / "correlation_heatmap.png",
