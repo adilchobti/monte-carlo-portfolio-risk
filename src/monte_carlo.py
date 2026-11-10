@@ -5,33 +5,6 @@ import matplotlib.pyplot as plt
 
 from pathlib import Path
 
-# ==========================================
-# 0. VISUAL IDENTITY — BRITISH RACING GREEN
-# ==========================================
-CHART_BG = "#142019"
-AXES_BG = "#1b2a21"
-TEXT_COLOR = "#e7e5dc"
-MUTED_COLOR = "#a5a58d"
-GRID_COLOR = "#405247"
-
-def apply_portfolio_style():
-    """Apply the portfolio's dark green visual identity to all charts."""
-    plt.rcParams.update({
-        "figure.facecolor": CHART_BG, "axes.facecolor": AXES_BG,
-        "savefig.facecolor": CHART_BG, "savefig.edgecolor": CHART_BG,
-        "text.color": TEXT_COLOR, "axes.labelcolor": TEXT_COLOR,
-        "axes.edgecolor": GRID_COLOR, "xtick.color": MUTED_COLOR,
-        "ytick.color": MUTED_COLOR, "font.family": "DejaVu Sans",
-        "font.size": 10, "axes.titlesize": 14, "axes.titleweight": "medium",
-        "axes.labelsize": 10, "legend.facecolor": AXES_BG,
-        "legend.edgecolor": GRID_COLOR, "legend.labelcolor": TEXT_COLOR,
-        "grid.color": GRID_COLOR, "grid.alpha": 0.42,
-    })
-
-apply_portfolio_style()
-
-
-
 
 # ==========================================
 # 1. PROJECT CONFIGURATION
@@ -349,33 +322,40 @@ def save_simulation_results(portfolio_values):
 
 def plot_simulation_paths(portfolio_values):
 
-    fig, ax = plt.subplots(figsize=(12, 7), facecolor=CHART_BG)
-    fig.patch.set_facecolor(CHART_BG)
-    ax.set_facecolor(AXES_BG)
+    plt.figure(figsize=(12, 7))
 
     # Display 100 simulated portfolio paths
     for i in range(100):
 
-        ax.plot(portfolio_values[i], color="#a5a58d", alpha=0.16, linewidth=0.75)
+        plt.plot(
+            portfolio_values[i],
+            alpha=0.12,
+            linewidth=0.8
+        )
 
-    ax.axhline(INITIAL_PORTFOLIO_VALUE, color="#d4c9a8", linestyle="--", linewidth=1.25, label="Initial Portfolio Value")
+    plt.axhline(
+        INITIAL_PORTFOLIO_VALUE,
+        linestyle="--",
+        label="Initial Portfolio Value"
+    )
 
-    ax.set_title("Monte Carlo Portfolio Simulations", color=TEXT_COLOR, pad=16)
-    ax.set_xlabel("Trading Days", labelpad=10)
-    ax.set_ylabel("Portfolio Value ($)", labelpad=10)
-    ax.legend(framealpha=1, fontsize=9)
-    ax.grid(True, linewidth=0.6)
-    ax.set_axisbelow(True)
-    fig.tight_layout(pad=2)
+    plt.title(
+        "Monte Carlo Portfolio Simulations"
+    )
 
-    fig.savefig(
+    plt.xlabel("Trading Days")
+
+    plt.ylabel("Portfolio Value ($)")
+
+    plt.legend()
+
+    plt.grid(alpha=0.2)
+
+    plt.tight_layout()
+
+    plt.savefig(
         RESULTS_DIR / "monte_carlo_paths.png",
-        dpi=300,
-        facecolor=CHART_BG,
-        edgecolor=CHART_BG,
-        transparent=False,
-        bbox_inches="tight",
-        pad_inches=0.15
+        dpi=300
     )
 
     plt.show()
@@ -389,32 +369,42 @@ def plot_final_distribution(portfolio_values):
 
     final_values = portfolio_values[:, -1]
 
-    fig, ax = plt.subplots(figsize=(11, 6), facecolor=CHART_BG)
-    fig.patch.set_facecolor(CHART_BG)
-    ax.set_facecolor(AXES_BG)
+    plt.figure(figsize=(11, 6))
 
-    ax.hist(final_values, bins=60, density=True, color="#91a98c", edgecolor=AXES_BG, linewidth=0.55, alpha=0.92)
+    plt.hist(
+        final_values,
+        bins=60,
+        density=True,
+        alpha=0.75
+    )
 
-    ax.axvline(INITIAL_PORTFOLIO_VALUE, color="#e7e5dc", linestyle="--", linewidth=1.3, label="Initial Portfolio Value")
+    plt.axvline(
+        INITIAL_PORTFOLIO_VALUE,
+        linestyle="--",
+        label="Initial Portfolio Value"
+    )
 
-    ax.axvline(np.percentile(final_values, 5), color="#c49b75", linestyle="--", linewidth=1.3, label="5th Percentile")
+    plt.axvline(
+        np.percentile(final_values, 5),
+        linestyle="--",
+        label="5th Percentile"
+    )
 
-    ax.set_title("Monte Carlo Final Portfolio Value Distribution", color=TEXT_COLOR, pad=16)
-    ax.set_xlabel("Final Portfolio Value ($)", labelpad=10)
-    ax.set_ylabel("Probability Density", labelpad=10)
-    ax.legend(framealpha=1, fontsize=9)
-    ax.grid(axis="y", linewidth=0.6)
-    ax.set_axisbelow(True)
-    fig.tight_layout(pad=2)
+    plt.title(
+        "Monte Carlo Final Portfolio Value Distribution"
+    )
 
-    fig.savefig(
+    plt.xlabel("Final Portfolio Value ($)")
+
+    plt.ylabel("Probability Density")
+
+    plt.legend()
+
+    plt.tight_layout()
+
+    plt.savefig(
         RESULTS_DIR / "monte_carlo_distribution.png",
-        dpi=300,
-        facecolor=CHART_BG,
-        edgecolor=CHART_BG,
-        transparent=False,
-        bbox_inches="tight",
-        pad_inches=0.15
+        dpi=300
     )
 
     plt.show()
